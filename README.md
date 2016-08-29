@@ -1,2 +1,0 @@
-# memoryleak
-Team Memory Leaks

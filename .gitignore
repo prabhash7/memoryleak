@@ -1,0 +1,17 @@
+
+# Intellij IDEA
+.idea
+
+# Eclipse
+.settings
+.project
+
+# Git
+.git
+
+# Build files
+/server/build
+
+# Don't deliver McQueen jars
+/server/lib
+

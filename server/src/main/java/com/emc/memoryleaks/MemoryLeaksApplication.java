@@ -1,4 +1,4 @@
-package com.emc.memoryleaks.beans;
+package com.emc.memoryleaks;
 
 
 
