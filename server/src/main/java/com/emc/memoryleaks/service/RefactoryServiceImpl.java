@@ -39,11 +39,7 @@ public class RefactoryServiceImpl implements RepositoryService {
 	
 	@Override
 	public List<EdpSystem> findAllSystems() {
-		try {
-			createSystem("MCUser","10.7.103.79","vmware7");
-		} catch (EdpException e) {
-			e.printStackTrace();
-		}
+	
 		return edpRepo.findAllSystems();		
 	
 	}
@@ -62,7 +58,9 @@ public class RefactoryServiceImpl implements RepositoryService {
 
 	@Override
 	public EdpSystem findSystemById(String id) {
-		return null;
+		
+		
+		return edpRepo.findSystemById(id);
 	}
 
 	@Override
