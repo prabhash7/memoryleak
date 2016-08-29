@@ -2,7 +2,8 @@
 
 angular.module('myApp', [
     'ngRoute',
-    'myApp.version'
+    'myApp.version',
+//    'ui.tree'
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
             $routeProvider.otherwise({redirectTo: 'index.html'});
             $httpProvider.defaults.useXDomain = true;
