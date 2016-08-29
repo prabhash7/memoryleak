@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Memory-Leaks</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+    <div ng-view></div>
+
+    <div ng-app="myApp"> 
+        <global-header></global-header>
+        <div ng-controller="memoryLeaksCtrl" class="contentPane">
+            <ul>
+                <li ng-repeat="x in records">{{x.id}}</li>
+            </ul>
+
+            <table>
+                <tr ng-repeat="x in records">
+                    <td>{{x}}</td>
+                    <td>{{x}}</td> 
+                </tr>
+            </table>            
+
+            <p>Policy ID: {{records.id}}</p>
+            <p>Policy Name: {{records.content}}</p>
+        </div>
+    </div>
+
+    <!--    <nav class="side-nav l-pinned-left l-layer-4 l-offset-nav">
+            <div ng-class="appCtrl.showDocsNav ? 'is-visible' : ''" class="side-nav-secondary">
+                <div class="nav-blocks">
+                    <a href="/docs/ts/latest/tutorial/" title="" class="nav-title ">Dashboard</a>
+                </div>
+                <div class="nav-blocks">
+                    <a href="/docs/ts/latest/tutorial/" title="" class="nav-title is-nav-title-selected">Plans</a>
+                </div>
+                <div class="nav-blocks">
+                    <a href="/docs/ts/latest/guide/" title="" class="nav-title ">Assets<img src="images/ic_keyboard_arrow_down_black_24px.svg" class="inline-arrow-down-svg"></a>
+                    <div class="nav-ordered-lists  is-hidden">
+                        <ul>
+                            <li class="nav-list-item ">
+                                <a title="">Protectable Assets</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Storage Assets</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Protection Storage Assets</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="nav-blocks">
+                    <a href="/docs/ts/latest/guide/" title="" class="nav-title ">Tenants<img src="images/ic_keyboard_arrow_down_black_24px.svg" class="inline-arrow-down-svg"></a>
+                    <div class="nav-ordered-lists is-hidden">
+                        <ul>
+                            <li class="nav-list-item ">
+                                <a href="/docs/ts/latest/guide/" title="How to read and use this documentation">1. Overview</a></li>            
+                            <li class="nav-list-item "><a href="/docs/ts/latest/guide/architecture.html" title="The basic building blocks of Angular 2 applications">2. Architecture</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/displaying-data.html" title="Interpolation and other forms of property binding help us show app data in the UI.">3. Displaying Data</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/user-input.html" title="User input triggers DOM events. We listen to those events with event bindings that funnel updated values back into our components and models.">4. User Input</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/forms.html" title="A form creates a cohesive, effective, and compelling data entry experience. An Angular form coordinates a set of data-bound user controls, tracks changes, validates input, and presents errors.">5. Forms</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/dependency-injection.html" title="Angular's dependency injection system creates and delivers dependent services &quot;just-in-time&quot;.">6. Dependency Injection</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/template-syntax.html" title="Learn how to write templates that display data and consume user events with the help of data binding.">7. Template Syntax</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/cheatsheet.html" title="A quick guide to Angular syntax.">8. Angular Cheat Sheet</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/style-guide.html" title="Write Angular 2 with style.">9. Style Guide</a></li><li class="nav-list-item "><a href="/docs/ts/latest/guide/glossary.html" title="Brief definitions of the most important words in the Angular 2 vocabulary">10. Glossary</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="nav-blocks">
+                    <a href="/docs/ts/latest/guide/" title="" class="nav-title ">Activity<img src="images/ic_keyboard_arrow_down_black_24px.svg" class="inline-arrow-down-svg"></a>
+                    <div class="nav-ordered-lists is-hidden">
+                        <ul>
+                            <li class="nav-list-item ">
+                                <a title="">Plan Compliance</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Tasks</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Events</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="nav-blocks">
+                    <a href="/docs/ts/latest/guide/" title="" class="nav-title ">Settings<img src="images/ic_keyboard_arrow_down_black_24px.svg" class="inline-arrow-down-svg"></a>
+                    <div class="nav-ordered-lists is-hidden">
+                        <ul>
+                            <li class="nav-list-item ">
+                                <a title="">Overview</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Inventory Sources</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Credentials</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Logs</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">System Protection</a>
+                            </li>
+                            <li class="nav-list-item ">
+                                <a title="">Upgrades</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        </nav>-->
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="app.js"></script>
+    <script src="components/version/version.js"></script>
+    <script src="components/version/version-directive.js"></script>
+    <script src="components/version/interpolate-filter.js"></script>
+</body>
+</html>
