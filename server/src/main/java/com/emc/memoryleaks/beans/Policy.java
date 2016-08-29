@@ -1,9 +1,5 @@
 package com.emc.memoryleaks.beans;
 
-import org.springframework.data.annotation.Id;
-
-import java.util.List;
-
 public class Policy {
 	private final long id;
 	private final String content;
