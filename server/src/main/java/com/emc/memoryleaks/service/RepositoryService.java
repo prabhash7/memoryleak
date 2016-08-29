@@ -11,14 +11,14 @@ import java.util.List;
  */
 public interface RepositoryService {
 
-    EdpSystem createSystem(DataProtectionProviderConfig dpProviderConfig) throws EdpException;
+	public EdpSystem createSystem( String username, String host, String password) throws EdpException;
 
-    boolean removeSystem(String id);
+	public boolean removeSystem(String id);
 
-    EdpSystem findSystemById(String id);
+	public EdpSystem findSystemById(String id);
 
-    EdpPolicy findPolicyById(String policyId);
+	public  EdpPolicy findPolicyById(String policyId);
 
-    List<EdpSystem> findAllSystems();
+	public List<EdpSystem> findAllSystems();
 
 }
