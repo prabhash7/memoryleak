@@ -85,27 +85,17 @@ public class ProviderController {
                 .collect(Collectors.toList());
     }
 
-    private static Provider mapEdpSystem(final EdpSystem edpSystem) {
-        if (edpSystem != null) {
-            return new Provider(edpSystem.getId(), edpSystem.getDisplayName(), edpSystem.getDescription(), "");
-        } else {
-            return null;
-        }
+    @RequestMapping("provider/{providerId}/policy")
+    public List<Policy> getPolicyList(@PathVariable("providerId") final String providerId) {
+        return repoSvc.findSystemById(providerId).findAllPolicies()
+                .stream()
+                .map(Policy::convert)
+                .collect(Collectors.toList());
     }
 
-    private static Client mapEdpClient(final EdpClient c) {
-        if (c != null) {
-            return new Client(c.getId(), c.getDisplayName(), c.getDescription(), "");
-        } else {
-            return null;
-        }
-    }
-
-    private static Backup mapEdpBackup(final EdpBackup b) {
-        if (b != null) {
-            return new Backup(b.getId(), b.getDisplayName(), b.getDescription(), "");
-        } else {
-            return null;
-        }
+    @RequestMapping("provider/{providerId}/policy/{policyId}")
+    public Policy getPolicy(@PathVariable("providerId") final String providerId,
+                            @PathVariable("policyId") final String policyId) {
+        return Policy.convert(repoSvc.findSystemById(providerId).findPolicyById(policyId));
     }
 }
