@@ -1,7 +1,10 @@
 package com.emc.memoryleaks.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,25 +27,19 @@ public class PoliciesController {
 
     @CrossOrigin(origins = "*") 
     @RequestMapping("/policies")
-    public ArrayList<Policy> greeting(@RequestParam(value="name", defaultValue="World") String name) {
+    public List<Policy> greeting(@RequestParam(value="name", defaultValue="World") String name) {
+    	
+    	return repSvc.findAllSystems().stream().flatMap(system -> {
+    		 return  system.findAllPolicies()
+    				.stream()
+    				.map(PoliciesController::convert);
+    		}).collect(Collectors.toList());
 
+    }
+    
+    public static Policy convert(EdpPolicy edpPolicy) {
     	
+    	return new Policy(edpPolicy.getId(), null, null, edpPolicy.getDisplayName());
     	
-    	Policy policy1 = new Policy(String.valueOf(counter.incrementAndGet()) ,
-                          String.format(template, name),
-                          "ABrandNewDataset", "policy1");
-    	
-    	Policy policy2 = new Policy(String.valueOf(counter.incrementAndGet()),
-                String.format(template, name),
-                "ADifferenctDataSet", "policy2");
-    	ArrayList<Policy> policies = new ArrayList<Policy>();
-    	
-    	repSvc.findAllSystems().forEach(system -> {
-    		policies.add((Policy) system.findAllPolicies().stream().map(Policy::convert));
-    	});
-    	
-    	policies.add(policy1);
-    	policies.add(policy2);
-        return policies;
     }
 }
