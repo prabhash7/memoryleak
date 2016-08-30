@@ -35,7 +35,7 @@ public class ProviderController {
         logger.debug("get /providers");
         return repoSvc.findAllSystems()
                 .stream()
-                .map(this::mapEdpSystem)
+                .map(ProviderController::mapEdpSystem)
                 .collect(Collectors.toList());
     }
 
@@ -56,7 +56,7 @@ public class ProviderController {
     public List<Client> getClientList(@PathVariable("id") final String id) {
         return repoSvc.findSystemById(id).findAllClients()
                 .stream()
-                .map(this::mapEdpClient)
+                .map(ProviderController::mapEdpClient)
                 .collect(Collectors.toList());
     }
 
@@ -69,8 +69,8 @@ public class ProviderController {
 
     @RequestMapping("provider/{providerId}/client/{clientId}/backup")
     public List<Backup> getBackupList(@PathVariable("providerId") final String providerId,
-                                         @PathVariable("clientId") final String clientId,
-                                         @RequestParam(value = "count", defaultValue = "10") String count) {
+                                      @PathVariable("clientId") final String clientId,
+                                      @RequestParam(value = "count", defaultValue = "10") String count) {
         int countInt = 10;
         try {
             countInt = Integer.parseInt(count);
@@ -79,11 +79,11 @@ public class ProviderController {
         }
         return repoSvc.findSystemById(providerId).findClientById(clientId).getBackups(countInt)
                 .stream()
-                .map(this::mapEdpBackup)
+                .map(ProviderController::mapEdpBackup)
                 .collect(Collectors.toList());
     }
 
-    private Provider mapEdpSystem(final EdpSystem edpSystem) {
+    private static Provider mapEdpSystem(final EdpSystem edpSystem) {
         if (edpSystem != null) {
             return new Provider(edpSystem.getId(), edpSystem.getDisplayName(), edpSystem.getDescription());
         } else {
@@ -91,7 +91,7 @@ public class ProviderController {
         }
     }
 
-    private Client mapEdpClient(final EdpClient c) {
+    private static Client mapEdpClient(final EdpClient c) {
         if (c != null) {
             return new Client(c.getId(), c.getDisplayName(), c.getDescription());
         } else {
@@ -99,7 +99,7 @@ public class ProviderController {
         }
     }
 
-    private Backup mapEdpBackup(final EdpBackup b) {
+    private static Backup mapEdpBackup(final EdpBackup b) {
         if (b != null) {
             return new Backup(b.getId(), b.getDisplayName(), b.getDescription());
         } else {
