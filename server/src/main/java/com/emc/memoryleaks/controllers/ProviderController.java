@@ -33,7 +33,12 @@ public class ProviderController {
 	@RequestMapping("/provider")
 	public List<EdpSystem> getProviderList() throws EdpException {
 		logger.debug("get /providers");
-		//repoSvc.createSystem("MCUser","10.7.103.79","vmware7"); // Uncomment to run with hardcoded user details
+
+		repoSvc.createSystem("MCUser","10.7.103.79","vmware7"); // Uncomment to run with hardcoded user details
+		repoSvc.findAllSystems().forEach(system -> {
+			String hostname = system.getHost();
+			System.out.println("System -> "+ hostname);
+		});
 		return repoSvc.findAllSystems();
 	}
 
