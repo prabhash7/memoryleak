@@ -2,7 +2,7 @@
 
 angular.module('myApp', [
     'ngRoute',
-    'myApp.version'
+    'myApp.version',
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
         $routeProvider.otherwise({redirectTo: 'index.html'});
         $httpProvider.defaults.useXDomain = true;
@@ -55,11 +55,13 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
-	$http.get('/policies').
+    $http.get('/policies').
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
+            $scope.selectedPolicy = data[0];
         });
+    var me = this;
     $http.get('/provider').
         success(function (data) {
             $scope.providers = data;
@@ -70,15 +72,28 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
                 $scope.provider = data[0].name;
             }
             console.log('received: ' + $scope.provider);
-            var providerId = data[0].id;
-            $http.get('/provider/' + providerId + '/client').
+            me.providerId = data[0].id;
+            $http.get('/provider/' + me.providerId + '/client').
                 success(function (data) {
                     $scope.clients = data;
-            });
+                });
         });
     $scope.setSelectedPolicy = function (policy) {
         $scope.selectedPolicy = policy;
     };
+    $scope.setSelectedClient = function (client) {
+        $scope.selectedClient = client;
+        //get backups for the client
+        $scope.backups = [];
+        $http.get('/provider/' + me.providerId + '/client/' + client.id + '/backup').
+        success(function (data) {
+            $scope.backups = data;
+        }); 
+    };
+    $scope.backup = function () {
+        $http.get('/provider/' + $scope.selectedPolicy.id + '/client/' + $scope.selectedClient.id + '/adhoc').
+            success(function (data) {
+                alert(data);
+            });
+    };
 });
-
-
