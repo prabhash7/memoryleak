@@ -19,8 +19,8 @@ import static com.emc.memoryleaks.beans.Provider.convert;
 @CrossOrigin(origins = "*")
 public class ProviderController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProviderController.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(ProviderController.class);
+	
     @Autowired
     private RepositoryService repoSvc;
 
