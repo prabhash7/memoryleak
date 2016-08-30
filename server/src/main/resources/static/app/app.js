@@ -3,7 +3,7 @@
 angular.module('myApp', [
     'ngRoute',
     'myApp.version',
-//    'ui.tree'
+    'ui.tree'
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
             $routeProvider.otherwise({redirectTo: 'index.html'});
             $httpProvider.defaults.useXDomain = true;
@@ -19,10 +19,46 @@ angular.module('myApp').directive('globalHeader', function () {
     };
 });
 
+angular.module('myApp').directive('sideNav', function () {
+    return {
+        restrict: 'E',
+        templateUrl: "sideNav.html"
+    };
+});
+
+angular.module('myApp').directive('policyList', function () {
+    return {
+        restrict: 'E',
+        templateUrl: "policyList.html"
+    };
+});
+
+angular.module('myApp').directive('policyDetails', function () {
+    return {
+        restrict: 'E',
+        templateUrl: "policyDetails.html"
+    };
+});
+
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
-    $http.get('http://10.168.246.11:8080/policy').
+    $http.get('/policies').
         success(function (data) {
             $scope.records = data;
             console.log('received: ' + $scope.records.id);
         });
+    $http.get('/provider').
+    success(function (data) {
+        $scope.providers = data;
+        var idx = data[0].name.indexOf(':');
+        if (idx != -1){
+        	$scope.provider = data[0].name.substring(idx + 1);
+        } else {
+        	$scope.provider = data[0].name;
+        }
+        console.log('received: ' + $scope.provider);
+    });
+});
+
+angular.module('myApp').config(function(treeConfig) {
+  treeConfig.defaultCollapsed = true;
 });
