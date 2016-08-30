@@ -82,7 +82,7 @@ public class ProviderController {
     }
 
     @RequestMapping("provider/{providerId}/policy")
-    public List<Backup> getPolicyList(@PathVariable("providerId") final String providerId) {
+    public List<Policy> getPolicyList(@PathVariable("providerId") final String providerId) {
         return repoSvc.findSystemById(providerId).findAllPolicies()
                 .stream()
                 .map(Policy::convert)
