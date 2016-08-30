@@ -6,11 +6,10 @@ import com.emc.edp4vcac.domain.EdpSystem;
 import com.emc.edp4vcac.domain.model.EdpException;
 import com.emc.memoryleaks.beans.*;
 import com.emc.memoryleaks.service.RepositoryService;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,12 +68,9 @@ public class ProviderController {
     public Client getClientById(@PathVariable("providerId") final String providerId,
                                 @PathVariable("clientId") final String clientId) {
         logger.debug("getClientById({}, {})", providerId, clientId);
-        if(clientId.contains("-"))
-    	{
-    	int lastIndex=clientId.lastIndexOf("-");
-    	return convert(repoSvc.findSystemById(providerId).findClientById(clientId.substring(lastIndex+1)));
-    	}
-        return convert(repoSvc.findSystemById(providerId).findClientById(clientId));
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        return convert(system.findClientById(filterClientId(clientId)));
     }
 
     @RequestMapping("provider/{providerId}/client/{clientId}/backup")
@@ -87,36 +83,81 @@ public class ProviderController {
         } catch (final NumberFormatException e) {
             logger.warn("Invalid backup count given, {}, defaulting to 10", count);
         }
-        return repoSvc.findSystemById(providerId).findClientById(clientId).getBackups(countInt)
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+        return client.getBackups(countInt)
                 .stream()
                 .map(Backup::convert)
                 .collect(Collectors.toList());
     }
 
     @RequestMapping("provider/{providerId}/client/{clientId}/policy")
-    public ResponseEntity<List<Policy>> getClientPolicyList(@PathVariable("providerId") final String providerId,
-                                                            @PathVariable("clientId") final String clientId) {
+    public List<Policy> getClientPolicyList(@PathVariable("providerId") final String providerId,
+                                            @PathVariable("clientId") final String clientId) {
         EdpSystem system = repoSvc.findSystemById(providerId);
-        EdpClient client = system.findClientById(clientId);
-        List<Policy> responseBody = client.getPolicies()
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+        return client.getPolicies()
                 .stream()
                 .map(Policy::convert)
                 .collect(Collectors.toList());
-        return new ResponseEntity(responseBody, HttpStatus.OK);
+    }
+
+    @RequestMapping("provider/{providerId}/client/{clientId}/policy/{policyId}/adhock")
+    public String runClientBackupForPolicy(@PathVariable("providerId") final String providerId,
+                                           @PathVariable("clientId") final String clientId,
+                                           @PathVariable("policyId") final String policyId) {
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+        Optional<EdpPolicy> first = client.getPolicies()
+                .stream()
+                .filter(p -> p.getId().equals(policyId))
+                .findFirst();
+
+        if (first.isPresent()) {
+            String callbackId = UUID.randomUUID().toString();
+            first.get().adhocRunByClient(client, callbackId, "MemoryLeak App is awesome!");
+            return "callbackId= " + callbackId;
+        } else {
+            return "Client not found";
+        }
+    }
+
+    @RequestMapping("provider/{providerId}/client/{clientId}/policy/{policyId}")
+    public Policy getClientPolicy(@PathVariable("providerId") final String providerId,
+                                  @PathVariable("clientId") final String clientId,
+                                  @PathVariable("policyId") final String policyId) {
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+
+        return Policy.convert(client.getPolicies()
+                .stream()
+                .filter(p -> p.getId().equals(policyId))
+                .findFirst().orElse(null));
     }
 
     @RequestMapping("provider/{providerId}/client/{clientId}/adhock")
-    public ResponseEntity<String> runClientBackup(@PathVariable("providerId") final String providerId,
-                                                  @PathVariable("clientId") final String clientId) {
+    public String runClientBackup(@PathVariable("providerId") final String providerId,
+                                  @PathVariable("clientId") final String clientId) {
         EdpSystem system = repoSvc.findSystemById(providerId);
-        EdpClient client = system.findClientById(clientId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+
         Optional<EdpPolicy> first = client.getPolicies().stream().findFirst();
         if (first.isPresent()) {
             String callbackId = UUID.randomUUID().toString();
             first.get().adhocRunByClient(client, callbackId, "MemoryLeak App is awesome!");
-            return new ResponseEntity<String>("callbackId= " + callbackId, HttpStatus.OK);
+            return "callbackId= " + callbackId;
         } else {
-            return new ResponseEntity<String>("Client not found", HttpStatus.NOT_FOUND);
+            return "Client not found";
         }
     }
 
@@ -132,5 +173,20 @@ public class ProviderController {
     public Policy getPolicy(@PathVariable("providerId") final String providerId,
                             @PathVariable("policyId") final String policyId) {
         return Policy.convert(repoSvc.findSystemById(providerId).findPolicyById(policyId));
+    }
+
+    /**
+     * Removed the provider id from the front of the clientId
+     *
+     * @param clientId
+     * @return
+     */
+    private static String filterClientId(String clientId) {
+        String result = clientId;
+        if (clientId.contains("-")) {
+            int lastIndex = clientId.lastIndexOf("-");
+            result = clientId.substring(lastIndex + 1);
+        }
+        return result;
     }
 }

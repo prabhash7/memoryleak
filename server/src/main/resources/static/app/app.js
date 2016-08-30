@@ -55,10 +55,11 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
-	$http.get('/policies').
+    $http.get('/policies').
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
+            $scope.selectedPolicy = data[0];
         });
     $http.get('/provider').
         success(function (data) {
@@ -69,16 +70,32 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             } else {
                 $scope.provider = data[0].name;
             }
+            $scope.selectedProvider = data[0];
             console.log('received: ' + $scope.provider);
             var providerId = data[0].id;
             $http.get('/provider/' + providerId + '/client').
                 success(function (data) {
                     $scope.clients = data;
-            });
+                });
         });
     $scope.setSelectedPolicy = function (policy) {
         $scope.selectedPolicy = policy;
+        $http.get("/policy/"+policy.id)
+        .then(function (response) {$scope.policy = response.data.records;});
+    };
+        
+    $scope.setSelectedClient = function (client) {
+        $scope.selectedClient = client;
+        $http.get("/client/"+client.id)
+        .then(function (response) {$scope.client = response.data.records;});
+    };
+    $scope.setSelectedClient = function (client) {
+        $scope.selectedClient = client;
+    };
+    $scope.backup = function () {
+        $http.get('/provider/' + $scope.selectedProvider.id + '/client/' + $scope.selectedClient.id + '/adhock').
+            success(function (data) {
+                alert(data);
+            });
     };
 });
-
-

@@ -1,3 +1,22 @@
 <div class="clientDetails">
     <div class="clientDetailTitle">{{selectedClient.name}}</div>
+
+    <div class="space">
+        <div> 
+            <table>
+                <tr>
+                    <td>{{ selectedClient.id}}</td>
+                </tr>
+                <tr>
+                    <td>{{ selectedClient.name}}</td>
+                </tr>
+                <tr>
+                    <td>{{ selectedClient.description}}</td> 
+                </tr>
+            </table>
+        </div>   
+        <div class="space2">
+        <button class="btn" ng-click="backup()">Backup</button>
+        </div>
+    </div>
 </div>
