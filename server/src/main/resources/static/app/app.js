@@ -55,7 +55,7 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
-    
+
     $http.get('/policies').
         success(function (data) {
             $scope.policies = data;
@@ -75,6 +75,7 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             }
             $scope.selectedProvider = data[0];
             console.log('received: ' + $scope.provider);
+
             me.providerId = data[0].id;
             $http.get('/provider/' + me.providerId + '/client').
                 success(function (data) {
