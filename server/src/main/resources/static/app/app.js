@@ -78,6 +78,14 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         });
     $scope.setSelectedPolicy = function (policy) {
         $scope.selectedPolicy = policy;
+        $http.get("/policy/"+policy.id)
+        .then(function (response) {$scope.policy = response.data.records;});
+    };
+        
+    $scope.setSelectedClient = function (client) {
+        $scope.selectedClient = client;
+        $http.get("/client/"+client.id)
+        .then(function (response) {$scope.client = response.data.records;});
     };
 });
 
