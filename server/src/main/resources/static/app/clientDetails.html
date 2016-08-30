@@ -14,9 +14,20 @@
                     <td>{{ selectedClient.description}}</td> 
                 </tr>
             </table>
-        </div>   
+        </div> 
+        <div class="space2">
+	      	<div ng-show="backups != []"> 
+				<table>
+					<thead>BACKUPS</thead>
+				  	<tr ng-repeat="backup in backups">
+				    	<td>{{ backup.name }}</td>
+				  	</tr>
+				</table>
+			</div> 
+        </div>  
         <div class="space2">
         <button class="btn" ng-click="backup()">Backup</button>
         </div>
     </div>
+
 </div>

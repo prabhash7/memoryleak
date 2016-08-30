@@ -2,7 +2,6 @@
     <div class="contentRow" ng-repeat="x in policies">
         <div class="contentCell" ng-class="{true: 'is-content-row-selected'}[selectedPolicy.id == x.id]" ng-click="setSelectedPolicy(x)">
           <div class="planTitle"><a ng-click="setSelectedPolicy(x)">{{x.name}}</a></div>
-            <div class="planSubTitle">{{x.details}}</div>
         </div>
     </div>
 </div>
