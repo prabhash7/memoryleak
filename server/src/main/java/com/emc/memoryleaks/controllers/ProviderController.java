@@ -1,8 +1,12 @@
 package com.emc.memoryleaks.controllers;
 
+import com.emc.edp4vcac.domain.EdpBackup;
+import com.emc.edp4vcac.domain.EdpClient;
+import com.emc.edp4vcac.domain.EdpSystem;
 import com.emc.edp4vcac.domain.model.EdpException;
 import com.emc.memoryleaks.beans.*;
 import com.emc.memoryleaks.service.RepositoryService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +66,11 @@ public class ProviderController {
     public Client getClientById(@PathVariable("providerId") final String providerId,
                                 @PathVariable("clientId") final String clientId) {
         logger.debug("getClientById({}, {})", providerId, clientId);
+        if(clientId.contains("-"))
+    	{
+    	int lastIndex=clientId.lastIndexOf("-");
+    	return convert(repoSvc.findSystemById(providerId).findClientById(clientId.substring(lastIndex+1)));
+    	}
         return convert(repoSvc.findSystemById(providerId).findClientById(clientId));
     }
 
@@ -87,5 +96,11 @@ public class ProviderController {
                 .stream()
                 .map(Policy::convert)
                 .collect(Collectors.toList());
+    }
+
+    @RequestMapping("provider/{providerId}/policy/{policyId}")
+    public Policy getPolicy(@PathVariable("providerId") final String providerId,
+                            @PathVariable("policyId") final String policyId) {
+        return Policy.convert(repoSvc.findSystemById(providerId).findPolicyById(policyId));
     }
 }

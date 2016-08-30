@@ -7,13 +7,13 @@ import com.emc.edp4vcac.domain.EdpSystem;
  */
 public class Provider extends BaseBean {
 
-    public Provider(String id, String name, String description) {
-        super(id, name, description);
+    public Provider(String id, String name, String description, String details) {
+        super(id, name, description, details);
     }
 
     public static Provider convert(final EdpSystem edpSystem) {
         if (edpSystem != null) {
-            return new Provider(edpSystem.getId(), edpSystem.getDisplayName(), edpSystem.getDescription());
+            return new Provider(edpSystem.getId(), edpSystem.getDisplayName(), edpSystem.getDescription(), "");
         } else {
             return null;
         }

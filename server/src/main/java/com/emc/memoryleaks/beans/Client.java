@@ -7,13 +7,13 @@ import com.emc.edp4vcac.domain.EdpClient;
  */
 public class Client extends BaseBean {
 
-    public Client(String id, String name, String description) {
-        super(id, name, description);
+    public Client(String id, String name, String description, String details) {
+        super(id, name, description, details);
     }
 
     public static Client convert(final EdpClient c) {
         if (c != null) {
-            return new Client(c.getId(), c.getDisplayName(), c.getDescription());
+            return new Client(c.getId(), c.getDisplayName(), c.getDescription(), "");
         } else {
             return null;
         }
