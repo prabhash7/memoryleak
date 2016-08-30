@@ -17,8 +17,10 @@
         <global-header></global-header>
         <div ng-controller="memoryLeaksCtrl">
             <side-nav></side-nav>
-            <policy-list></policy-list>
-            <policy-details></policy-details>
+            <div ng-show="selectedTab === 'clients'"><client-list></client-list>
+            <client-details></client-details></div>
+            <div ng-show="selectedTab === 'policies'"><policy-list></policy-list>
+            <policy-details></policy-details></div>
         </div>
 
     <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
