@@ -2,7 +2,7 @@
 
 angular.module('myApp', [
     'ngRoute',
-    'myApp.version'
+    'myApp.version',
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
         $routeProvider.otherwise({redirectTo: 'index.html'});
         $httpProvider.defaults.useXDomain = true;
@@ -55,12 +55,15 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
+
     $http.get('/policies').
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
             $scope.selectedPolicy = data[0];
         });
+
+    var me = this;
     $http.get('/provider').
         success(function (data) {
             $scope.providers = data;
@@ -72,8 +75,9 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             }
             $scope.selectedProvider = data[0];
             console.log('received: ' + $scope.provider);
-            var providerId = data[0].id;
-            $http.get('/provider/' + providerId + '/client').
+
+            me.providerId = data[0].id;
+            $http.get('/provider/' + me.providerId + '/client').
                 success(function (data) {
                     $scope.clients = data;
                 });
@@ -88,12 +92,16 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         $scope.selectedClient = client;
         $http.get("/client/"+client.id)
         .then(function (response) {$scope.client = response.data.records;});
+        //get backups for the client
+        $scope.backups = [];
+        $http.get('/provider/' + me.providerId + '/client/' + client.id + '/backup').
+        success(function (data) {
+            $scope.backups = data;
+        }); 
     };
-    $scope.setSelectedClient = function (client) {
-        $scope.selectedClient = client;
-    };
+
     $scope.backup = function () {
-        $http.get('/provider/' + $scope.selectedProvider.id + '/client/' + $scope.selectedClient.id + '/adhock').
+        $http.get('/provider/' + me.providerId + '/client/' + $scope.selectedClient.id + '/adhock').
             success(function (data) {
                 alert(data);
             });
