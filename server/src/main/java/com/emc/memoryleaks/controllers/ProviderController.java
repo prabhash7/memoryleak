@@ -66,6 +66,11 @@ public class ProviderController {
     public Client getClientById(@PathVariable("providerId") final String providerId,
                                 @PathVariable("clientId") final String clientId) {
         logger.debug("getClientById({}, {})", providerId, clientId);
+        if(clientId.contains("-"))
+    	{
+    	int lastIndex=clientId.lastIndexOf("-");
+    	return convert(repoSvc.findSystemById(providerId).findClientById(clientId.substring(lastIndex+1)));
+    	}
         return convert(repoSvc.findSystemById(providerId).findClientById(clientId));
     }
 
