@@ -5,12 +5,12 @@ angular.module('myApp', [
     'myApp.version',
     'ui.tree'
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
-            $routeProvider.otherwise({redirectTo: 'index.html'});
-            $httpProvider.defaults.useXDomain = true;
-            delete $httpProvider.defaults.headers.common["X-Requested-With"];
-            $httpProvider.defaults.headers.common["Accept"] = "application/json";
-            $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
-        }]);
+        $routeProvider.otherwise({redirectTo: 'index.html'});
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common["X-Requested-With"];
+        $httpProvider.defaults.headers.common["Accept"] = "application/json";
+        $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
+    }]);
 
 angular.module('myApp').directive('globalHeader', function () {
     return {
@@ -43,22 +43,25 @@ angular.module('myApp').directive('policyDetails', function () {
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $http.get('/policies').
         success(function (data) {
-            $scope.records = data;
-            console.log('received: ' + $scope.records.id);
+            $scope.policies = data;
+            console.log('received: ' + $scope.policies.id);
         });
     $http.get('/provider').
-    success(function (data) {
-        $scope.providers = data;
-        var idx = data[0].name.indexOf(':');
-        if (idx != -1){
-        	$scope.provider = data[0].name.substring(idx + 1);
-        } else {
-        	$scope.provider = data[0].name;
-        }
-        console.log('received: ' + $scope.provider);
-    });
+        success(function (data) {
+            $scope.providers = data;
+            var idx = data[0].name.indexOf(':');
+            if (idx != -1) {
+                $scope.provider = data[0].name.substring(idx + 1);
+            } else {
+                $scope.provider = data[0].name;
+            }
+            console.log('received: ' + $scope.provider);
+        });
+    $scope.setSelectedPolicy = function (policy) {
+        $scope.selectedPolicy = policy;
+    };
 });
 
-angular.module('myApp').config(function(treeConfig) {
-  treeConfig.defaultCollapsed = true;
+angular.module('myApp').config(function (treeConfig) {
+    treeConfig.defaultCollapsed = true;
 });

@@ -9,8 +9,9 @@ public class Policy extends BaseBean {
     }
     
     public static Policy convert(EdpPolicy edpPolicy) {
-    	
-    	return new Policy(edpPolicy.getId(), edpPolicy.getDisplayName(), "", "");
+    	String displayName=edpPolicy.getDisplayName();
+    	int firstSpaceOccurence=displayName.indexOf(" ");
+    	return new Policy(edpPolicy.getId(), displayName.substring(0, firstSpaceOccurence),edpPolicy.getDescription(),edpPolicy.getDetails());
     	
     }
 }
