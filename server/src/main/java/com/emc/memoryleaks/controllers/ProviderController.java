@@ -1,18 +1,21 @@
 package com.emc.memoryleaks.controllers;
 
-import com.emc.edp4vcac.domain.EdpBackup;
 import com.emc.edp4vcac.domain.EdpClient;
+import com.emc.edp4vcac.domain.EdpPolicy;
 import com.emc.edp4vcac.domain.EdpSystem;
 import com.emc.edp4vcac.domain.model.EdpException;
 import com.emc.memoryleaks.beans.*;
 import com.emc.memoryleaks.service.RepositoryService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.emc.memoryleaks.beans.Client.convert;
@@ -23,8 +26,8 @@ import static com.emc.memoryleaks.beans.Provider.convert;
 @CrossOrigin(origins = "*")
 public class ProviderController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProviderController.class);
-	
+    private static final Logger logger = LoggerFactory.getLogger(ProviderController.class);
+
     @Autowired
     private RepositoryService repoSvc;
 
@@ -83,6 +86,33 @@ public class ProviderController {
                 .stream()
                 .map(Backup::convert)
                 .collect(Collectors.toList());
+    }
+
+    @RequestMapping("provider/{providerId}/client/{clientId}/policy")
+    public ResponseEntity<List<Policy>> getClientPolicyList(@PathVariable("providerId") final String providerId,
+                                                            @PathVariable("clientId") final String clientId) {
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        EdpClient client = system.findClientById(clientId);
+        List<Policy> responseBody = client.getPolicies()
+                .stream()
+                .map(Policy::convert)
+                .collect(Collectors.toList());
+        return new ResponseEntity(responseBody, HttpStatus.OK);
+    }
+
+    @RequestMapping("provider/{providerId}/client/{clientId}/adhock")
+    public ResponseEntity<String> runClientBackup(@PathVariable("providerId") final String providerId,
+                                                  @PathVariable("clientId") final String clientId) {
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        EdpClient client = system.findClientById(clientId);
+        Optional<EdpPolicy> first = client.getPolicies().stream().findFirst();
+        if (first.isPresent()) {
+            String callbackId = UUID.randomUUID().toString();
+            first.get().adhocRunByClient(client, callbackId, "MemoryLeak App is awesome!");
+            return new ResponseEntity<String>("callbackId= " + callbackId, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Client not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @RequestMapping("provider/{providerId}/policy")
