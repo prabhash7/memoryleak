@@ -21,8 +21,7 @@ public class PolicyController {
     public Policy greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return new Policy(String.valueOf(counter.incrementAndGet()),
                           String.format(template, name),
-                          "ABrandNewDataset",
-                          "policy");
+                          "ABrandNewDataset");
     }
     
     @CrossOrigin(origins = "*") 
@@ -31,7 +30,6 @@ public class PolicyController {
     		@PathVariable(value = "id") String id) {
         return new Policy(String.valueOf(counter.incrementAndGet()),
                           String.format(template, name, id),
-                          "ABrandNewDataset", 
-                          "policy");
+                          "ABrandNewDataset");
     }
 }
