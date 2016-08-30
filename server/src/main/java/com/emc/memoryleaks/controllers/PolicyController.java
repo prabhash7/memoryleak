@@ -20,7 +20,7 @@ public class PolicyController {
     @RequestMapping("/policy")
     public Policy greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return new Policy(String.valueOf(counter.incrementAndGet()),
-                          String.format(template, name),
+                          String.format(template, name, ""),
                           "ABrandNewDataset", "");
     }
     
