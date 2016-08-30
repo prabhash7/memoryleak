@@ -55,22 +55,16 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
-<<<<<<< HEAD
+    
     $http.get('/policies').
-=======
-    $http.get('http://10.168.246.11:8080/policies').
->>>>>>> fd928675c6e6f6a3f6f863f2eab181d0b2a74dc6
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
             $scope.selectedPolicy = data[0];
         });
-<<<<<<< HEAD
+
     var me = this;
     $http.get('/provider').
-=======
-    $http.get('http://10.168.246.11:8080/provider').
->>>>>>> fd928675c6e6f6a3f6f863f2eab181d0b2a74dc6
         success(function (data) {
             $scope.providers = data;
             var idx = data[0].name.indexOf(':');
@@ -81,13 +75,8 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             }
             $scope.selectedProvider = data[0];
             console.log('received: ' + $scope.provider);
-<<<<<<< HEAD
             me.providerId = data[0].id;
             $http.get('/provider/' + me.providerId + '/client').
-=======
-            var providerId = data[0].id;
-            $http.get('http://10.168.246.11:8080/provider/' + providerId + '/client').
->>>>>>> fd928675c6e6f6a3f6f863f2eab181d0b2a74dc6
                 success(function (data) {
                     $scope.clients = data;
                 });
@@ -110,9 +99,6 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         }); 
     };
 
-    $scope.setSelectedClient = function (client) {
-        $scope.selectedClient = client;
-    };
     $scope.backup = function () {
         $http.get('/provider/' + me.providerId + '/client/' + $scope.selectedClient.id + '/adhock').
             success(function (data) {
