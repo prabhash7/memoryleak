@@ -2,8 +2,7 @@
 
 angular.module('myApp', [
     'ngRoute',
-    'myApp.version',
-    'ui.tree'
+    'myApp.version'
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
         $routeProvider.otherwise({redirectTo: 'index.html'});
         $httpProvider.defaults.useXDomain = true;
@@ -40,8 +39,26 @@ angular.module('myApp').directive('policyDetails', function () {
     };
 });
 
+
+	
+
+angular.module('myApp').directive('clientList', function () {
+    return {
+        restrict: 'E',
+        templateUrl: "clientList.html"
+    };
+});
+
+angular.module('myApp').directive('clientDetails', function () {
+    return {
+        restrict: 'E',
+        templateUrl: "clientDetails.html"
+    };
+});
+
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
-    $http.get('/policies').
+    $scope.selectedTab = 'clients';
+	$http.get('/policies').
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
@@ -56,12 +73,17 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
                 $scope.provider = data[0].name;
             }
             console.log('received: ' + $scope.provider);
+            var providerId = data[0].id;
+            $http.get('/provider/' + providerId + '/client').
+                success(function (data) {
+                    $scope.clients = data;
+            });
         });
     $scope.setSelectedPolicy = function (policy) {
         $scope.selectedPolicy = policy;
+        $http.get("/policy/"+policy.id)
+        .then(function (response) {$scope.policy = response.data.records;});
     };
 });
 
-angular.module('myApp').config(function (treeConfig) {
-    treeConfig.defaultCollapsed = true;
-});
+
