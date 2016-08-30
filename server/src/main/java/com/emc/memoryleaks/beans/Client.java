@@ -5,7 +5,7 @@ package com.emc.memoryleaks.beans;
  */
 public class Client extends BaseBean {
 
-    public Client(String id, String name, String description) {
-        super(id, name, description);
+    public Client(String id, String name, String description, String details) {
+        super(id, name, description, details);
     }
 }

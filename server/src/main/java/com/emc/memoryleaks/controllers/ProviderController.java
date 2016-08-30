@@ -85,7 +85,7 @@ public class ProviderController {
 
     private static Provider mapEdpSystem(final EdpSystem edpSystem) {
         if (edpSystem != null) {
-            return new Provider(edpSystem.getId(), edpSystem.getDisplayName(), edpSystem.getDescription());
+            return new Provider(edpSystem.getId(), edpSystem.getDisplayName(), edpSystem.getDescription(), "");
         } else {
             return null;
         }
@@ -93,7 +93,7 @@ public class ProviderController {
 
     private static Client mapEdpClient(final EdpClient c) {
         if (c != null) {
-            return new Client(c.getId(), c.getDisplayName(), c.getDescription());
+            return new Client(c.getId(), c.getDisplayName(), c.getDescription(), "");
         } else {
             return null;
         }
@@ -101,7 +101,7 @@ public class ProviderController {
 
     private static Backup mapEdpBackup(final EdpBackup b) {
         if (b != null) {
-            return new Backup(b.getId(), b.getDisplayName(), b.getDescription());
+            return new Backup(b.getId(), b.getDisplayName(), b.getDescription(), "");
         } else {
             return null;
         }

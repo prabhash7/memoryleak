@@ -8,11 +8,13 @@ public abstract class BaseBean {
     private String id;
     private String name;
     private String description;
+    private String details;
 
-    public BaseBean(String id, String name, String description) {
+    public BaseBean(String id, String name, String description, String details) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.details = details;
     }
 
     public String getId() {
@@ -38,4 +40,12 @@ public abstract class BaseBean {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public String getDetails() {
+		return details;
+	}
+
+	public void setDetails(String details) {
+		this.details = details;
+	}
 }

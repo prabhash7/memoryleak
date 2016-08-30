@@ -5,7 +5,7 @@ package com.emc.memoryleaks.beans;
  */
 public class Provider extends BaseBean {
 
-    public Provider(String id, String name, String description) {
-        super(id, name, description);
+    public Provider(String id, String name, String description, String details) {
+        super(id, name, description, details);
     }
 }
