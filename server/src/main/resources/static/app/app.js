@@ -39,12 +39,6 @@ angular.module('myApp').directive('policyDetails', function () {
     };
 });
 
-<<<<<<< HEAD
-
-	
-
-=======
->>>>>>> f3d59103363d5401cdb44021934ca2834ed792f6
 angular.module('myApp').directive('clientList', function () {
     return {
         restrict: 'E',
@@ -86,6 +80,12 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         $scope.selectedPolicy = policy;
         $http.get("/policy/"+policy.id)
         .then(function (response) {$scope.policy = response.data.records;});
+    };
+        
+    $scope.setSelectedClient = function (client) {
+        $scope.selectedClient = client;
+        $http.get("/client/"+client.id)
+        .then(function (response) {$scope.client = response.data.records;});
     };
 });
 
