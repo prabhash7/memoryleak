@@ -88,9 +88,6 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         $scope.selectedClient = client;
         $http.get("/client/"+client.id)
         .then(function (response) {$scope.client = response.data.records;});
-    };
-    $scope.setSelectedClient = function (client) {
-        $scope.selectedClient = client;
         //get backups for the client
         $scope.backups = [];
         $http.get('/provider/' + me.providerId + '/client/' + client.id + '/backup').
@@ -98,6 +95,7 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             $scope.backups = data;
         }); 
     };
+
     $scope.backup = function () {
         $http.get('/provider/' + $scope.selectedPolicy.id + '/client/' + $scope.selectedClient.id + '/adhoc').
             success(function (data) {

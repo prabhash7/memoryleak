@@ -14,5 +14,11 @@
 		  </tr>
 		</table>
 	</div>   
-    
+   	<div ng-show="backups != []"> 
+		<table><thead>BACKUPS</thead>
+		  <tr ng-repeat="backup in backups">
+		    <td>{{ backup.name }}</td>
+		  </tr>
+		</table>
+	</div>    
 </div>
