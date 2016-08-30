@@ -19,17 +19,19 @@ public class PolicyController {
     @CrossOrigin(origins = "*") 
     @RequestMapping("/policy")
     public Policy greeting(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Policy(counter.incrementAndGet(),
+        return new Policy(String.valueOf(counter.incrementAndGet()),
                           String.format(template, name),
-                          "ABrandNewDataset");
+                          "ABrandNewDataset",
+                          "policy");
     }
     
     @CrossOrigin(origins = "*") 
     @RequestMapping("/policy/{id}")
     public Policy policyById(@RequestParam(value="name", defaultValue="World") String name,
     		@PathVariable(value = "id") String id) {
-        return new Policy(counter.incrementAndGet(),
+        return new Policy(String.valueOf(counter.incrementAndGet()),
                           String.format(template, name, id),
-                          "ABrandNewDataset");
+                          "ABrandNewDataset", 
+                          "policy");
     }
 }
