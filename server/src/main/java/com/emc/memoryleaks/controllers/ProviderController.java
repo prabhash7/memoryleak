@@ -6,6 +6,7 @@ import com.emc.edp4vcac.domain.EdpSystem;
 import com.emc.edp4vcac.domain.model.EdpException;
 import com.emc.memoryleaks.beans.*;
 import com.emc.memoryleaks.service.RepositoryService;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +68,9 @@ public class ProviderController {
     public Client getClientById(@PathVariable("providerId") final String providerId,
                                 @PathVariable("clientId") final String clientId) {
         logger.debug("getClientById({}, {})", providerId, clientId);
-        if (clientId.contains("-")) {
-            int lastIndex = clientId.lastIndexOf("-");
-            return convert(repoSvc.findSystemById(providerId).findClientById(clientId.substring(lastIndex + 1)));
-        }
-        return convert(repoSvc.findSystemById(providerId).findClientById(clientId));
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        return convert(system.findClientById(filterClientId(clientId)));
     }
 
     @RequestMapping("provider/{providerId}/client/{clientId}/backup")
@@ -84,7 +83,11 @@ public class ProviderController {
         } catch (final NumberFormatException e) {
             logger.warn("Invalid backup count given, {}, defaulting to 10", count);
         }
-        return repoSvc.findSystemById(providerId).findClientById(clientId).getBackups(countInt)
+        EdpSystem system = repoSvc.findSystemById(providerId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+        return client.getBackups(countInt)
                 .stream()
                 .map(Backup::convert)
                 .collect(Collectors.toList());
@@ -94,7 +97,9 @@ public class ProviderController {
     public List<Policy> getClientPolicyList(@PathVariable("providerId") final String providerId,
                                             @PathVariable("clientId") final String clientId) {
         EdpSystem system = repoSvc.findSystemById(providerId);
-        EdpClient client = system.findClientById(clientId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
         return client.getPolicies()
                 .stream()
                 .map(Policy::convert)
@@ -106,7 +111,9 @@ public class ProviderController {
                                            @PathVariable("clientId") final String clientId,
                                            @PathVariable("policyId") final String policyId) {
         EdpSystem system = repoSvc.findSystemById(providerId);
-        EdpClient client = system.findClientById(clientId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
         Optional<EdpPolicy> first = client.getPolicies()
                 .stream()
                 .filter(p -> p.getId().equals(policyId))
@@ -126,7 +133,10 @@ public class ProviderController {
                                   @PathVariable("clientId") final String clientId,
                                   @PathVariable("policyId") final String policyId) {
         EdpSystem system = repoSvc.findSystemById(providerId);
-        EdpClient client = system.findClientById(clientId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+
         return Policy.convert(client.getPolicies()
                 .stream()
                 .filter(p -> p.getId().equals(policyId))
@@ -137,7 +147,10 @@ public class ProviderController {
     public String runClientBackup(@PathVariable("providerId") final String providerId,
                                   @PathVariable("clientId") final String clientId) {
         EdpSystem system = repoSvc.findSystemById(providerId);
-        EdpClient client = system.findClientById(clientId);
+        Preconditions.checkNotNull(system, "unable to find provider");
+        EdpClient client = system.findClientById(filterClientId(clientId));
+        Preconditions.checkNotNull(client, "unable to find client");
+
         Optional<EdpPolicy> first = client.getPolicies().stream().findFirst();
         if (first.isPresent()) {
             String callbackId = UUID.randomUUID().toString();
@@ -160,5 +173,20 @@ public class ProviderController {
     public Policy getPolicy(@PathVariable("providerId") final String providerId,
                             @PathVariable("policyId") final String policyId) {
         return Policy.convert(repoSvc.findSystemById(providerId).findPolicyById(policyId));
+    }
+
+    /**
+     * Removed the provider id from the front of the clientId
+     *
+     * @param clientId
+     * @return
+     */
+    private static String filterClientId(String clientId) {
+        String result = clientId;
+        if (clientId.contains("-")) {
+            int lastIndex = clientId.lastIndexOf("-");
+            result = clientId.substring(lastIndex + 1);
+        }
+        return result;
     }
 }
