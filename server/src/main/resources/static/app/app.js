@@ -55,13 +55,13 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
-    $http.get('http://10.168.246.11:8080/policies').
+    $http.get('/policies').
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
             $scope.selectedPolicy = data[0];
         });
-    $http.get('http://10.168.246.11:8080/provider').
+    $http.get('/provider').
         success(function (data) {
             $scope.providers = data;
             var idx = data[0].name.indexOf(':');
@@ -73,7 +73,7 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             $scope.selectedProvider = data[0];
             console.log('received: ' + $scope.provider);
             var providerId = data[0].id;
-            $http.get('http://10.168.246.11:8080/provider/' + providerId + '/client').
+            $http.get('/provider/' + providerId + '/client').
                 success(function (data) {
                     $scope.clients = data;
                 });
@@ -93,7 +93,7 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         $scope.selectedClient = client;
     };
     $scope.backup = function () {
-        $http.get('http://10.168.246.11:8080/provider/' + $scope.selectedProvider.id + '/client/' + $scope.selectedClient.id + '/adhoc').
+        $http.get('/provider/' + $scope.selectedProvider.id + '/client/' + $scope.selectedClient.id + '/adhock').
             success(function (data) {
                 alert(data);
             });
