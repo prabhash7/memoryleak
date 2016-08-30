@@ -21,6 +21,7 @@ a:hover,a:focus,li:hover,li:focus{
 }
 
 .space2 {
+    width: 100%;
     padding-top: 10px;
     float: left;
 }
