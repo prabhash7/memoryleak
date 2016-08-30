@@ -23,7 +23,7 @@ a:hover,a:focus,li:hover,li:focus{
 .serverNav:last-child{border:none}
 
 .serverItem,.side-nav .side-nav-secondary .nav-sub-title{text-transform:uppercase;font-weight:500;color:#ffffff}
-.serverItem{font-size:12px;padding:12px 12px;margin:0;background-color:#555555}
+.serverItem{font-size:14px;padding:12px 12px;margin:0;background-color:#555555}
 .serverItem .inline-arrow-down-svg{float:right;opacity:0.99}
 .serverItem a:hover{display:inline;text-decoration:none;}
 
@@ -76,13 +76,13 @@ table tbody th a{color:#0262C2}
 table tbody tr:last-child td{border:none}
 
 .planTitle a {
-    font-size:16px;
+    font-size:14px;
     text-decoration:none;
     display:block;
 }
 
 .planSubTitle a {
-    font-size:90%;
+    font-size:80%;
     text-decoration:none;
     color:#888888;
     display:block;
@@ -96,7 +96,7 @@ table tbody tr:last-child td{border:none}
 
 .contentRow {
     border-bottom:1px solid #DEDEDE;
-    width: 325px;
+    width: 400px;
 }
 .is-content-row-selected{background-color:#dcedf9!important;}
 .contentRow:hover { 
@@ -108,25 +108,26 @@ table tbody tr:last-child td{border:none}
     text-decoration:none;
 }
 .contentCell {
-    padding-top: 10px;
+    padding-top: 16px;
     padding-left: 16px;
     padding-right: 10px;
     padding-bottom: 16px;
+    cursor: pointer;
 }
 
 .policyDetails {
     margin-top: 56px;
-    margin-left: 525px;
+    margin-left: 600px;
     width: 100%;
-    height: 10000px;
+    height: 1000px;
     border-left: 1px solid #DEDEDE;
 }
 
-.contentTitle {
+.policyDetailTitle {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 16px;
-    font-size:200%;
+    font-size:150%;
     border-bottom: 1px solid #DEDEDE;
 }
 

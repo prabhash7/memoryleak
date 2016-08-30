@@ -1,9 +1,9 @@
 <div class="policyList">
 
-    <div class="contentRow" ng-repeat="x in records">
-        <div class="contentCell">
-            <div class="planTitle"><a>{{x.content}}</a></div>
-            <div class="planSubTitle">{{x.id}}</div>
+    <div class="contentRow" ng-repeat="x in policies">
+        <div class="contentCell" ng-click="setSelectedPolicy(x)">
+            <div class="planTitle"><a ng-click="setSelectedPolicy(x)">{{x.name}}</a></div>
+            <div class="planSubTitle">{{x.description}}</div>
         </div>
     </div>
 
@@ -11,36 +11,6 @@
 <!--         <div class="contentCell"> -->
 <!--             <div class="planTitle"><a>Plan-Dante Bichette</a></div> -->
 <!--             <div class="planSubTitle"><a>Alphonse Dante Bichette, Sr. is a former professional baseball player. He played in Major League Baseball as an outfielder for the California Angels, Milwaukee Brewers, Colorado Rockies, Cincinnati Reds, and Boston Red Sox.</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
-<!--     <div class="contentRow"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Larry Walker</a></div> -->
-<!--             <div class="planSubTitle"><a>Larry Kenneth Robert Walker (born December 1, 1966) is a Canadian former right fielder in Major League Baseball.</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
-<!--     <div class="contentRow"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Todd Helton</a></div> -->
-<!--             <div class="planSubTitle"><a>Todd Lynn Helton (born August 20, 1973) is a former American professional baseball first baseman who played his entire 17-year career for the Colorado Rockies</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
-<!--     <div class="contentRow"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Matt Holiday</a></div> -->
-<!--             <div class="planSubTitle"><a>Matthew Thomas "Matt" Holliday (born January 15, 1980) is an American professional baseball left fielder for the St. Louis Cardinals of Major League Baseball</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
-<!--     <div class="contentRow"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Tim Tebow</a></div> -->
-<!--             <div class="planSubTitle"><a>Timothy Richard Tebow is an American football quarterback who is a free agent. He played college football for the University of Florida, winning the Heisman</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
-<!--     <div class="contentRow"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Tiger Woods</a></div> -->
-<!--             <div class="planSubTitle"><a>Eldrick Tont "Tiger" Woods (born December 30, 1975) is an American professional golfer who is among the most successful golfers of all time.</a></div> -->
 <!--         </div> -->
 <!--     </div> -->
 </div>
