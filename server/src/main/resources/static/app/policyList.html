@@ -1,16 +1,8 @@
 <div class="policyList">
-
     <div class="contentRow" ng-repeat="x in policies">
-        <div class="contentCell" ng-click="setSelectedPolicy(x)">
-            <div class="planTitle"><a ng-click="setSelectedPolicy(x)">{{x.name}}</a></div>
-            <div class="planSubTitle">{{x.description}}</div>
+        <div class="contentCell" ng-class="{true: 'is-content-row-selected'}[selectedPolicy.id == x.id]" ng-click="setSelectedPolicy(x)">
+          <div class="planTitle"><a ng-click="setSelectedPolicy(x)">{{x.name}}</a></div>
+            <div class="planSubTitle">{{x.details}}</div>
         </div>
     </div>
-
-<!--     <div class="contentRow is-content-row-selected"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Dante Bichette</a></div> -->
-<!--             <div class="planSubTitle"><a>Alphonse Dante Bichette, Sr. is a former professional baseball player. He played in Major League Baseball as an outfielder for the California Angels, Milwaukee Brewers, Colorado Rockies, Cincinnati Reds, and Boston Red Sox.</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
 </div>
