@@ -4,13 +4,13 @@
     </div>
     <div ng-class="appCtrl.showDocsNav ? 'is-visible' : ''" class="side-nav-secondary">
         <div class="nav-blocks">
-            <a href="clients.html" title="" class="nav-title">Clients</a>
+            <a ng-click="selectedTab = 'clients'" title="" class="nav-title" ng-class="{true: 'is-nav-title-selected'}[selectedTab == 'clients']">Clients</a>
         </div>
         <div class="nav-blocks">
             <a href="datasets.html" title="" class="nav-title">Datasets</a>
         </div>
         <div class="nav-blocks">
-            <a href="policies.html" title="" class="nav-title is-nav-title-selected">Policies</a>
+            <a ng-click="selectedTab = 'policies'" title="" class="nav-title" ng-class="{true: 'is-nav-title-selected'}[selectedTab == 'policies']">Policies</a>
         </div>
         <div class="nav-blocks">
             <a href="retention.html" title="" class="nav-title">Retention</a>
