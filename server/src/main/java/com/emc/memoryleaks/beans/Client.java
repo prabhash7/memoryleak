@@ -13,7 +13,14 @@ public class Client extends BaseBean {
 
     public static Client convert(final EdpClient c) {
         if (c != null) {
-            return new Client(c.getId(), c.getDisplayName(), c.getDescription(), "");
+            final String details = "host=" + c.getInfo().getHost() +
+                    ", domain=" + c.getInfo().getDescription() +
+                    ", esxiHost=" + c.getInfo().getHost() +
+                    ", vmxPath=" + c.getInfo().getVmxPath() +
+                    ", vCenter=" + c.getInfo().getVcenter().getHostname() +
+                    ", dataCenter=" + c.getInfo().getDataCenter();
+
+            return new Client(c.getId(), c.getDisplayName(), c.getInfo().getDescription(), details);
         } else {
             return null;
         }

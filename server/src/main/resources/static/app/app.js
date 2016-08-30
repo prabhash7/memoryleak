@@ -39,9 +39,12 @@ angular.module('myApp').directive('policyDetails', function () {
     };
 });
 
+<<<<<<< HEAD
 
 	
 
+=======
+>>>>>>> f3d59103363d5401cdb44021934ca2834ed792f6
 angular.module('myApp').directive('clientList', function () {
     return {
         restrict: 'E',
