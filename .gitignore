@@ -9,6 +9,9 @@
 # Git
 .git
 
+# Gradle
+.gradle
+
 # Build files
 /server/build
 
