@@ -10,6 +10,9 @@ public class Policy extends BaseBean {
     }
 
     public static Policy convert(EdpPolicy edpPolicy) {
+        if (edpPolicy == null) {
+            return null;
+        }
         String displayName = edpPolicy.getDisplayName();
         int firstSpaceOccurence = displayName.indexOf(" ");
 
