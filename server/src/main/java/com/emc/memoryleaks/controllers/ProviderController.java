@@ -4,11 +4,9 @@ import com.emc.edp4vcac.domain.EdpBackup;
 import com.emc.edp4vcac.domain.EdpClient;
 import com.emc.edp4vcac.domain.EdpSystem;
 import com.emc.edp4vcac.domain.model.EdpException;
-import com.emc.memoryleaks.beans.Backup;
-import com.emc.memoryleaks.beans.Client;
-import com.emc.memoryleaks.beans.CreateSystemDetails;
-import com.emc.memoryleaks.beans.Provider;
+import com.emc.memoryleaks.beans.*;
 import com.emc.memoryleaks.service.RepositoryService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.emc.memoryleaks.beans.Client.convert;
+import static com.emc.memoryleaks.beans.Provider.convert;
+
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -35,28 +37,28 @@ public class ProviderController {
         logger.debug("get /providers");
         return repoSvc.findAllSystems()
                 .stream()
-                .map(ProviderController::mapEdpSystem)
+                .map(Provider::convert)
                 .collect(Collectors.toList());
     }
 
     @PostMapping(value = "/provider")
     public Provider createProvider(@RequestBody CreateSystemDetails createSystemDetails) throws EdpException {
         logger.debug("post /provider ");
-        return mapEdpSystem(repoSvc.createSystem(createSystemDetails.getUsername(),
+        return convert(repoSvc.createSystem(createSystemDetails.getUsername(),
                 createSystemDetails.getHost(), createSystemDetails.getPassword()));
     }
 
     @RequestMapping("/provider/{id}")
     public Provider getProviderById(@PathVariable("id") final String id) {
         logger.debug("get providers by Id");
-        return mapEdpSystem(repoSvc.findSystemById(id));
+        return convert(repoSvc.findSystemById(id));
     }
 
     @RequestMapping("/provider/{id}/client")
     public List<Client> getClientList(@PathVariable("id") final String id) {
         return repoSvc.findSystemById(id).findAllClients()
                 .stream()
-                .map(ProviderController::mapEdpClient)
+                .map(Client::convert)
                 .collect(Collectors.toList());
     }
 
@@ -64,7 +66,7 @@ public class ProviderController {
     public Client getClientById(@PathVariable("providerId") final String providerId,
                                 @PathVariable("clientId") final String clientId) {
         logger.debug("getClientById({}, {})", providerId, clientId);
-        return mapEdpClient(repoSvc.findSystemById(providerId).findClientById(clientId));
+        return convert(repoSvc.findSystemById(providerId).findClientById(clientId));
     }
 
     @RequestMapping("provider/{providerId}/client/{clientId}/backup")
@@ -79,7 +81,7 @@ public class ProviderController {
         }
         return repoSvc.findSystemById(providerId).findClientById(clientId).getBackups(countInt)
                 .stream()
-                .map(ProviderController::mapEdpBackup)
+                .map(Backup::convert)
                 .collect(Collectors.toList());
     }
 
