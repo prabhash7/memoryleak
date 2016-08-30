@@ -1,16 +1,8 @@
 <div class="clientList">
 
     <div class="contentRow" ng-repeat="x in clients">
-        <div class="contentCell" ng-click="setSelectedClient(x)">
+        <div class="contentCell" ng-class="{true: 'is-content-row-selected'}[selectedClient.id == x.id]" ng-click="setSelectedClient(x)">
             <div class="planTitle"><a ng-click="setSelectedClient(x)">{{x.name}}</a></div>
-            <div class="planSubTitle">{{x.description}}</div>
         </div>
     </div>
-
-<!--     <div class="contentRow is-content-row-selected"> -->
-<!--         <div class="contentCell"> -->
-<!--             <div class="planTitle"><a>Plan-Dante Bichette</a></div> -->
-<!--             <div class="planSubTitle"><a>Alphonse Dante Bichette, Sr. is a former professional baseball player. He played in Major League Baseball as an outfielder for the California Angels, Milwaukee Brewers, Colorado Rockies, Cincinnati Reds, and Boston Red Sox.</a></div> -->
-<!--         </div> -->
-<!--     </div> -->
 </div>

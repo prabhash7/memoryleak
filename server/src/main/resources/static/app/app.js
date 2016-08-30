@@ -55,12 +55,13 @@ angular.module('myApp').directive('clientDetails', function () {
 
 angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
     $scope.selectedTab = 'clients';
-	$http.get('/policies').
+    $http.get('http://10.168.246.11:8080/policies').
         success(function (data) {
             $scope.policies = data;
             console.log('received: ' + $scope.policies.id);
+            $scope.selectedPolicy = data[0];
         });
-    $http.get('/provider').
+    $http.get('http://10.168.246.11:8080/provider').
         success(function (data) {
             $scope.providers = data;
             var idx = data[0].name.indexOf(':');
@@ -69,12 +70,13 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
             } else {
                 $scope.provider = data[0].name;
             }
+            $scope.selectedProvider = data[0];
             console.log('received: ' + $scope.provider);
             var providerId = data[0].id;
-            $http.get('/provider/' + providerId + '/client').
+            $http.get('http://10.168.246.11:8080/provider/' + providerId + '/client').
                 success(function (data) {
                     $scope.clients = data;
-            });
+                });
         });
     $scope.setSelectedPolicy = function (policy) {
         $scope.selectedPolicy = policy;
@@ -87,6 +89,13 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
         $http.get("/client/"+client.id)
         .then(function (response) {$scope.client = response.data.records;});
     };
+    $scope.setSelectedClient = function (client) {
+        $scope.selectedClient = client;
+    };
+    $scope.backup = function () {
+        $http.get('http://10.168.246.11:8080/provider/' + $scope.selectedProvider.id + '/client/' + $scope.selectedClient.id + '/adhoc').
+            success(function (data) {
+                alert(data);
+            });
+    };
 });
-
-
