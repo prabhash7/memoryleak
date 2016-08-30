@@ -2,8 +2,7 @@
 
 angular.module('myApp', [
     'ngRoute',
-    'myApp.version',
-    'ui.tree'
+    'myApp.version'
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
         $routeProvider.otherwise({redirectTo: 'index.html'});
         $httpProvider.defaults.useXDomain = true;
@@ -83,6 +82,3 @@ angular.module('myApp').controller('memoryLeaksCtrl', function ($scope, $http) {
 });
 
 
-angular.module('myApp').config(function (treeConfig) {
-    treeConfig.defaultCollapsed = true;
-});
